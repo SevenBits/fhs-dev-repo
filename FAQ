@@ -1,0 +1,33 @@
+
+ * Can you sum up this extension in a few sentences?
+
+ This is a kernel extension for Linux(tm) which implements something close
+ to the System Integrity Protection feature introduced in Apple's OS X El 
+ Capitan. It helps to further harden the system by prohibiting all users
+ from writing to files in certain locations that are critical to the system.
+ Essentially, this acts as an additional safeguard for systems that *must*
+ remain secure.
+ 
+ The key issue nowadays is that many commonly-used programs for Linux,
+ especially those used on a server, contain security holes that can give a
+ hacker access to a root shell, giving them uncontested control over your
+ system. With Filesystem Hierarchy Protection, it will be harder for hackers
+ who gain access to your system to e.g. corrupt your operating system with
+ malware because most directories where programs can be installed are protected
+ by this extension, so nobody (not even root) can write to them.
+ 
+ * But doesn't this mean that the user can't install his own software?
+
+ Not necessarily. If the system administrator decides to allow it, custom
+ software can be installed to /usr/local or to a local home directory. Ideally,
+ this extension works best with a static software configuration, as any more
+ software installed increases the opportunity for vulnerabilities.
+ 
+ * But then how will the user/administrator apply software updates, etc.?
+ 
+ Since more often than not the system administrator has physical access to the
+ hardware, he can boot into an external medium, go into a chroot, and apply
+ software updates from there. Since Filesystem Hierarchy Protection won't be
+ running on this external medium, he will be able to edit files as he could
+ otherwise, and as soon as he reboots, Filesystem Hierarchy Protection will
+ kick in.

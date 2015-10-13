@@ -1,0 +1,30 @@
+
+Eventually, this will ship in Debian and Red Hat packages. For now though,
+you need to build and install from source. You will need to be somewhat
+competent in Linux to be able to reasonably do this.
+
+To build the module from source, run "make". Output will look like:
+
+	$ make
+		cd src && make
+		make[1]: Entering directory `/home/ryan/Code/mod-test/src'
+		make -C /lib/modules/3.13.0-49-generic/build M=/home/ryan/Code/mod-test/src modules
+		make[2]: Entering directory `/usr/src/linux-headers-3.13.0-49-generic'
+		  CC [M]  /home/ryan/Code/mod-test/src/main.o
+		  Building modules, stage 2.
+		  MODPOST 1 modules
+		  CC      /home/ryan/Code/mod-test/src/main.mod.o
+		  LD [M]  /home/ryan/Code/mod-test/src/main.ko
+		make[2]: Leaving directory `/usr/src/linux-headers-3.13.0-49-generic'
+		make[1]: Leaving directory `/home/ryan/Code/mod-test/src'
+
+Then, simply insert the module:
+
+	$ sudo insmod main.ko
+
+Note that, since this extension is currently a proof-and-concept, there is
+no installation option (since you shouldn't be using it on a real system
+anyway). Because of this, you must manually load and unload the kernel
+module yourself. If you don't know how to do this, then this project is
+probably not right for you at this stage. Sorry.
+

@@ -1,0 +1,117 @@
+===============================================================================
+
+Filesystem Hierarchy Protection (FHP) Linux Kernel Module
+
+===============================================================================
+
+About this module
+
+Filesystem Hierarchy Protection (FHP) is a work-in-progress kernel module for
+the Linux(tm) operating system which is intended to provide a similiar set of
+features to System Integrity Protection, a kernel feature implemented in Apple's
+OS X El Capitan to help secure the system by disallowing certain operations from
+being performed by the root user.
+
+Filesystem Hierarchy Protection works by denying write and append operations to
+files in certain locations deemed vital to system operation, including:
+
+	/usr/bin/
+	/bin
+	/boot
+	/sbin
+
+The intent of this module is to provide a hardened security layer for certain
+kinds of Linux systems whose configuration is expected to remain relatively
+constant. As of now, the above directories are protected by default when the
+module is enabled; later, a user-space tool will be added allowing a qualified
+user to add and remove directories from kernel protection.
+
+===============================================================================
+
+WARNING! Use at your own risk!
+
+As this software is pretty much not even alpha quality yet, the standard
+disclaimers apply, namely, that I cannot certify that this code will not damage
+your system or inpair its operation in some other way. I take no responsibility
+for this software and provide no warranty of any kind.
+
+===============================================================================
+
+Supported Kernels
+
+This has been tested on the following systems (all 64bit):
+
+ - Linux Mint 17.2 (3.13.0-49-generic)
+
+This module *should* work on most Linux kernels that are relatively recent, but
+it has has only been verified on the above systems. If you get a compile error 
+or a kernel panic/crash, please contact this module's author.
+
+===============================================================================
+
+Features (implemented and planned)
+
+* Deny root the ability to write to protected system directories
+* Configurable using a user-space command line tool
+
+===============================================================================
+
+Installation
+
+See the INSTALL file for installation instructions.
+
+===============================================================================
+
+FAQ
+
+See the FAQ file for frequently asked questions.
+
+===============================================================================
+
+License
+
+See the GPL file for license information (spoiler: it's GPL v2).
+
+===============================================================================
+
+Compatibility Issues
+
+Test this module before deploying to a critical system, especially if you're
+not using a kernel in the above "Supported Kernels" list and especially since
+this module is nowhere near complete. I strongly advise testing this on a
+separate system or virtual machine in the event of kernel panics. You have
+been warned!
+
+===============================================================================
+
+Current State
+
+This code was started as a "proof of concept" and the intention is to turn it
+into a valuable security tool at some point in the (admittedly very distant)
+future.
+
+===============================================================================
+
+BUGS
+
+There are currently no *known* bugs -- this should not be mistaken, however,
+for an assertion that there aren't any bugs. If you discover a bug, please
+report it to the author.
+
+If your system crashes as a result of FHP, consider setting the following:
+
+sudo sysctl kernel.panic_on_oops=0
+
+This will give you a chance to capture the kernel errors in your system logs.
+
+===============================================================================
+
+About the Author
+
+website: https://sevenbits.github.io/
+github: https://github.com/SevenBits/
+email: contact /AT/ sevenbits /DOT/ tk
+
+===============================================================================
+
+
