@@ -47,6 +47,13 @@ void set_page_rw(long unsigned int _addr) {
 }
 
 static int check_write_valid(const char *filename) {
+	// In order for less and more to work, we must be able to
+	// write to /usr/bin/.sysless. We add an exception here
+	// allowing that to happen.
+	if ( strcmp(filename, "/usr/bin/.sysless") == 0 ) {
+		return true;
+	}
+
 	const char **needle = protected_locations;
 	while (*needle) {
 		char *p = strstr(filename, *needle);
