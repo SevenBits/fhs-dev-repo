@@ -31,6 +31,7 @@ void **sys_call_table;
 asmlinkage int (*original_open_call)(const char *, int, int);
 asmlinkage int (*original_unlink_call)(const char *);
 asmlinkage int (*original_unlink_at_call)(const char *);
+asmlinkage void (*original_mmap_call)(void *, size_t, int, int, int, off_t);
 asmlinkage int (*getuid_call)(void);
 
 /*
@@ -102,6 +103,16 @@ all_ok:
 }
 
 /*
+ * We have to override mmap, since executable files are mmap-ed into
+ * memory, if we don't override it to deal with FHP, the user won't be
+ * able to execute any programs.
+ */
+asmlinkage void our_sys_mmap(void *addr, size_t length, int prot,
+                                   int flags, int fd, off_t offset) {
+	return original_mmap_call(addr, length, prot, flags, fd, offset);
+}
+
+/*
  * This is our new version of the open system call. This will replace
  * the current version running in the kernel.
  *
@@ -150,12 +161,14 @@ int init_module(void) {
 	original_open_call = sys_call_table[__NR_open];
 	original_unlink_call = sys_call_table[__NR_unlink];
 	original_unlink_at_call = sys_call_table[__NR_unlinkat];
+	original_mmap_call = sys_call_table[__NR_mmap];
 	getuid_call = sys_call_table[__NR_getuid];
 
 	set_page_rw((long unsigned int)sys_call_table);
 	sys_call_table[__NR_open] = our_sys_open;
 	sys_call_table[__NR_unlink] = our_sys_unlink;
 	sys_call_table[__NR_unlinkat] = our_sys_unlinkat;
+	sys_call_table[__NR_mmap] = our_sys_mmap;
 	return 0;
 }
  
@@ -170,6 +183,7 @@ void cleanup_module(void) {
 	sys_call_table[__NR_open] = original_open_call;
 	sys_call_table[__NR_unlink] = original_unlink_call;
 	sys_call_table[__NR_unlinkat] = original_unlink_at_call;
+	sys_call_table[__NR_mmap] = original_mmap_call;
 }
 
 
