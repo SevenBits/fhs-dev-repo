@@ -58,7 +58,7 @@ static int check_write_valid(const char *filename) {
 	while (*needle) {
 		char *p = strstr(filename, *needle);
 		if ( p && p - filename == 0 && *p == '/' ) {
-			printk(KERN_DEBUG "%s found in %s\n", *needle, filename);
+			//printk(KERN_DEBUG "%s found in %s\n", *needle, filename);
 			return false;
 		}
 		needle++;
@@ -78,7 +78,6 @@ asmlinkage int our_sys_unlinkat(int fd, const char *filename, int flags) {
 		goto all_ok;
 	}
 
-	printk(KERN_DEBUG "A file was unlinked by uid %d\n", getuid_call());
 	printk(KERN_INFO "Blocking unlinkat operation to %s\n", filename);
 	return EACCES;
 
@@ -99,7 +98,6 @@ asmlinkage int our_sys_unlink(const char *filename) {
 		goto all_ok;
 	}
 
-	printk(KERN_DEBUG "A file was unlinked by uid %d\n", getuid_call());
 	printk(KERN_INFO "Blocking unlink operation to %s\n", filename);
 	return EACCES;
 
@@ -146,7 +144,6 @@ asmlinkage int our_sys_open(const char *filename,
 		goto all_ok;
 	}
 
-	printk(KERN_DEBUG "A file was opened by uid %d, mode %d\n", getuid_call(), mode);
 	printk(KERN_INFO "Blocking write operation to %s\n", filename);
 	return EACCES;
 
