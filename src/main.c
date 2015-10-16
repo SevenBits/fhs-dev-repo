@@ -30,7 +30,7 @@ void **sys_call_table;
  */
 asmlinkage int (*original_open_call)(const char *, int, int);
 asmlinkage int (*original_unlink_call)(const char *);
-asmlinkage int (*original_unlink_at_call)(const char *);
+asmlinkage int (*original_unlink_at_call)(int, const char *, int);
 asmlinkage void (*original_mmap_call)(void *, size_t, int, int, int, off_t);
 asmlinkage int (*getuid_call)(void);
 
@@ -67,7 +67,7 @@ static int check_write_valid(const char *filename) {
 	return true;
 }
 
-asmlinkage int our_sys_unlinkat(const char *filename) {
+asmlinkage int our_sys_unlinkat(int fd, const char *filename, int flags) {
 	printk(KERN_DEBUG "user wants to unlinkat %s\n", filename);
 	// In order to be invalid, an operation must:
 	// 1) be a write operation AND
@@ -85,7 +85,7 @@ asmlinkage int our_sys_unlinkat(const char *filename) {
 all_ok:
 	// Call the original system call. Otherwise, we lose the ability to
 	// open any files. Needless to say, that's bad.
-	return original_unlink_at_call(filename);
+	return original_unlink_at_call(fd, filename, flags);
 }
 
 asmlinkage int our_sys_unlink(const char *filename) {
@@ -106,7 +106,7 @@ asmlinkage int our_sys_unlink(const char *filename) {
 all_ok:
 	// Call the original system call. Otherwise, we lose the ability to
 	// open any files. Needless to say, that's bad.
-	return original_unlink_at_call(filename);
+	return original_unlink_call(filename);
 }
 
 /*
