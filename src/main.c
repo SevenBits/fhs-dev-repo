@@ -89,7 +89,7 @@ all_ok:
 }
 
 asmlinkage int our_sys_unlink(const char *filename) {
-	printk(KERN_DEBUG "user wants to unlink %s\n", filename);
+	//printk(KERN_DEBUG "user wants to unlink %s\n", filename);
 	// In order to be invalid, an operation must:
 	// 1) be a write operation AND
 	// 2) be to a protected system location.
@@ -142,7 +142,7 @@ asmlinkage int our_sys_open(const char *filename,
 	// Okay, the user is trying to read in a protected directory. This
 	// isn't a problem as long as the user has permission, so skip ahead
 	// and allow the read.
-	if (mode & O_RDONLY) {
+	if (mode & O_RDONLY || mode & __FMODE_EXEC) {
 		goto all_ok;
 	}
 
