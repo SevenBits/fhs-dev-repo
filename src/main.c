@@ -17,7 +17,7 @@ const char *protected_locations[5] = {
 	"/boot",
 	"/sbin",
 	NULL
-	};
+};
 
 /*
  * This is the Linux system call table. Modifying this is dangerous!
@@ -47,6 +47,8 @@ void set_page_rw(long unsigned int _addr) {
 }
 
 static int check_write_valid(const char *filename) {
+	const char **needle;
+
 	// In order for less and more to work, we must be able to
 	// write to /usr/bin/.sysless. We add an exception here
 	// allowing that to happen.
@@ -54,7 +56,7 @@ static int check_write_valid(const char *filename) {
 		return true;
 	}
 
-	const char **needle = protected_locations;
+	needle = protected_locations;
 	while (*needle) {
 		char *p = strstr(filename, *needle);
 		if ( p && p - filename == 0 && *p == '/' ) {
