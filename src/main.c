@@ -187,6 +187,7 @@ int init_module(void) {
 	sys_call_table[__NR_unlink] = our_sys_unlink;
 	sys_call_table[__NR_unlinkat] = our_sys_unlinkat;
 	sys_call_table[__NR_mmap] = our_sys_mmap;
+	set_page_ro((long unsigned int)sys_call_table);
 	return 0;
 }
  
@@ -198,6 +199,7 @@ void cleanup_module(void) {
 		       " There may be issues...");
 	}
 
+	set_page_rw((long unsigned int)sys_call_table);
 	sys_call_table[__NR_open] = original_open_call;
 	sys_call_table[__NR_unlink] = original_unlink_call;
 	sys_call_table[__NR_unlinkat] = original_unlink_at_call;
