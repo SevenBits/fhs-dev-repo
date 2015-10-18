@@ -41,9 +41,21 @@ asmlinkage int (*getuid_call)(void);
  */
 void set_page_rw(long unsigned int _addr) {
 	unsigned int level;
-    pte_t *pte = lookup_address(_addr, &level);
+	pte_t *pte = lookup_address(_addr, &level);
 
-    if (pte->pte &~ _PAGE_RW) pte->pte |= _PAGE_RW;
+	if (pte->pte &~ _PAGE_RW) pte->pte |= _PAGE_RW;
+}
+
+/*
+ * This function restores the protection to the system call table
+ * so that the user can't write to it. If we don't do this then
+ * the Linux kernel could be modified, so this is good safety.
+ */
+void set_page_ro(long unsigned int _addr) {
+	unsigned int level;
+	pte_t *pte = lookup_address(_addr, &level);
+
+	pte->pte = pte->pte &~ _PAGE_RW;
 }
 
 static int check_write_valid(const char *filename) {
@@ -190,6 +202,7 @@ void cleanup_module(void) {
 	sys_call_table[__NR_unlink] = original_unlink_call;
 	sys_call_table[__NR_unlinkat] = original_unlink_at_call;
 	sys_call_table[__NR_mmap] = original_mmap_call;
+	set_page_ro((long unsigned int)sys_call_table);
 }
 
 
