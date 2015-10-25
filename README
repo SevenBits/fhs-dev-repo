@@ -7,7 +7,7 @@ Filesystem Hierarchy Protection (FHP) Linux Kernel Module
 About this module
 
 Filesystem Hierarchy Protection (FHP) is a work-in-progress kernel module for
-the Linux(tm) operating system which is intended to provide a similiar set of
+the Linux(TM) operating system which is intended to provide a similar set of
 features to System Integrity Protection, a kernel feature implemented in Apple's
 OS X El Capitan to help secure the system by disallowing certain operations from
 being performed by the root user.
@@ -32,7 +32,7 @@ WARNING! Use at your own risk!
 
 As this software is pretty much not even alpha quality yet, the standard
 disclaimers apply, namely, that I cannot certify that this code will not damage
-your system or inpair its operation in some other way. I take no responsibility
+your system or impair its operation in some other way. I take no responsibility
 for this software and provide no warranty of any kind.
 
 ===============================================================================
